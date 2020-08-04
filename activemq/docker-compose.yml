@@ -1,0 +1,19 @@
+version: '3.5'
+services:
+  activename:
+    image: webcenter/activemq
+    network_mode: "host" # 如果需要容器使用宿主机IP(内网IP)，则可以配置此项
+    container_name: activename
+    restart: always
+    ports:
+      - 61616:61616
+      - 61619:61619/udp
+      - 8161:8161
+    
+    #定义挂载点
+    volumes:
+      - ./data:/data/activemq
+      - ./log:/var/log/activemq
+
+
+# docker exec -it activemq /bin/bash

@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+  #rabbitmq container
+  rabbitmq:
+    #setup host name
+    network_mode: "host" # 如果需要容器使用宿主机IP(内网IP)，则可以配置此项
+    #use docker images
+    image: rabbitmq:3-management-alpine
+    #ports setting
+    ports:
+      - 15673:15672
+      - 5673:5672
+    restart: always
+    #volumes setting
+    volumes:
+      #- ./etc:/etc/rabbitmq/
+      - ./data:/var/lib/rabbitmq/
+      # - ./logs:/var/log/rabbitmq/log/  #加上日志卷启动会报权限问题
+    #环境变量
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=my_vhost
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin

@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  timescaledb:
+    image: timescale/timescaledb:1.7.1-pg12
+    container_name: basic-timescaledb
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: sddt8888
+    volumes:
+      - ./data:/var/lib/postgresql/data

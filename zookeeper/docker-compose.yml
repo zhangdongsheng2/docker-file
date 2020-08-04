@@ -1,0 +1,64 @@
+version: '3.4'
+services:
+zoo1:
+ image: zookeeper:3.4 # 镜像名称
+ restart: always # 当发生错误时自动重启
+ hostname: zoo1
+ container_name: zoo1
+ privileged: true
+ ports: # 端口
+  - 2184:2181
+ environment:
+  TZ: Asia/Shanghai
+  ZOO_MY_ID: 1 # 节点ID
+  ZOO_PORT: 2181 # zookeeper端口号
+  ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888 # zookeeper节点列表
+ networks:
+  mynetwork:
+   ipv4_address: 172.18.0.1
+
+zoo2:
+ image: zookeeper:3.4
+ restart: always
+ hostname: zoo2
+ container_name: zoo2
+ privileged: true
+ ports:
+  - 2182:2181
+ environment:
+  TZ: Asia/Shanghai
+  ZOO_MY_ID: 2
+  ZOO_PORT: 2181
+  ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+ networks:
+  mynetwork:
+   ipv4_address: 172.18.0.2
+
+zoo3:
+ image: zookeeper:3.4
+ restart: always
+ hostname: zoo3
+ container_name: zoo3
+ privileged: true
+ ports:
+  - 2183:2181
+ environment:
+  TZ: Asia/Shanghai
+  ZOO_MY_ID: 3
+  ZOO_PORT: 2181
+  ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+ networks:
+  mynetwork:
+   ipv4_address: 172.18.0.3
+
+networks:
+mynetwork:
+ external:
+  name: zookeeper-bridge
+  
+  
+  
+  
+#zkAddress="172.18.0.4:2181,172.18.0.5:2181,172.18.0.6:2181"  使用的时候直接配置地址, 这个只能在本地机器内网使用
+  
+  
