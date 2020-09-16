@@ -10,3 +10,4 @@ services:
     # 替换容器内redis.conf
     - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
 
+  docker run --name base-redis -p 6379:6379 -v /opt/redis/docker-conf/redis.conf:/opt/redis/conf/redis.conf -v
