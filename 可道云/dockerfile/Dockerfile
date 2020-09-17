@@ -27,6 +27,7 @@ yum install nginx -y &&\
 yum clean all
 
 ADD nginx.conf /etc/nginx/nginx.conf
+#下载官方 zip 解压并打包成 tar.gz 包
 ADD kdy.tar.gz /code
 WORKDIR /code
 RUN chmod 777 .
