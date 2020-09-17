@@ -4,7 +4,7 @@ services:
   image: redis:latest
   container_name: wxwl_redis
   ports:
-    - "7963:6379"
+    - "6379:6379"
   volumes:
     - ./data:/data
     # 替换容器内redis.conf
