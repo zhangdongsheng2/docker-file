@@ -1,0 +1,44 @@
+version: '3.5'
+services:
+  timescaledb:
+    image: timescale/timescaledb:1.7.1-pg12
+    container_name: basic-pg12master
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: wxwl8802
+      LANG: "C.UTF-8"
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data/psql/master:/var/lib/postgresql/data
+
+  #安装以下步骤操作
+
+  ----------------
+  # 连接数据库执行下面语句
+  CREATE ROLE repuser WITH
+  LOGIN
+  REPLICATION
+  CONNECTION LIMIT 5
+  PASSWORD 'Q1w2E#';
+
+
+  # 修改配置文件 /data/psql/master/pg_hba.conf
+  文末尾加 ; host replication repuser 192.168.9.20/32 md5
+
+  #修改postgresql.conf
+  #对以下参数进行调整
+  archive_mode = on
+  archive_command = '/bin/date'
+  max_wal_senders = 10
+  wal_keep_segments = 16
+  synchronous_standby_names = '*'
+
+# 重启主库
+
+
+
+
+
+

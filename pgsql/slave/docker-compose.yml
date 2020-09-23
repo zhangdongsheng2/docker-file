@@ -1,0 +1,59 @@
+version: '3.5'
+services:
+  timescaledb:
+    image: timescale/timescaledb:1.7.1-pg12
+    container_name: basic-pg12slave
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: wxwl8802
+      LANG: "C.UTF-8"
+      TZ: Asia/Shanghai
+    volumes:
+      - ./data/psql/slave:/var/lib/postgresql/data
+      - ./data/psql/repl:/var/lib/postgresql/repl
+
+  ###   ###   ###   ###  从库只读    ###   ###   ###   ###   ###
+  #安装以下步骤操作
+
+
+  #进入容器执行
+  docker exec -it -u postgres pg12slave /bin/bash
+  pg_basebackup -R -D /var/lib/postgresql/repl -Fp -Xs -v -P -h 192.168.9.30 -p 5432 -U repuser
+  #备份成功，退出容器。
+
+  #通过上一步的初始备份，现在可以使用 /data/psql/repl 里的数据重建 slave容器了。
+  #首先删除slave目录，然后将repl目录改为slave，这个目录就是从库的数据目录了。
+  docker stop pg12slave && docker rm pg12slave
+  cd /data/psql/
+  rm -rf slave
+  mv repl slave
+  cd /data/psql/slave
+
+  #检查 postgresql.auto.conf 文件里是否包含如下内容
+  primary_conninfo = 'user=repuser password=''Q1w2E#'' host=172.18.0.101 port=5432 sslmode=prefer sslcompression=0 gssencmode=prefer krbsrvname=postgres target_session_attrs=any'
+
+  #正确无误后，重建容器。
+  #这里不再挂载repl了，slave容器运行起来后，主从创建完成。
+
+  # 验证主从
+  ps -aux | grep postgres
+  # 主库有 walsender 进程如下
+  #postgres: walsender repuser
+  # 从库有 walreceiver 进程如下
+  #postgres: walreceiver
+
+  #连接主库，通过sql可以查询复制信息：
+
+  select * from pg_stat_replication;
+
+
+
+
+
+
+
+
+
+
