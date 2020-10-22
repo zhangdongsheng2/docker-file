@@ -1,0 +1,140 @@
+version: '3.5'
+services:
+  zabbix-snmptraps:
+    image: zabbix/zabbix-snmptraps
+    container_name: zabbix-snmptraps
+    restart: unless-stopped
+    ports:
+      - "162:1162/udp"
+    volumes:
+      - ./zbx_instance/snmptraps:/var/lib/zabbix/snmptraps:rw
+      - ./var/lib/zabbix/mibs:/usr/share/snmp/mibs:ro
+    networks:
+      - zabbix-net
+
+
+  zabbix-server: # alpine-5.0-latest
+    image: zabbix/zabbix-server-pgsql
+    container_name: zabbix-server
+    ports:
+      - "10051:10051"
+    volumes:
+      - ./zbx_instance/snmptraps:/var/lib/zabbix/snmptraps:rw
+      - ./var/lib/zabbix/mibs:/usr/share/snmp/mibs:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./zbx_env/usr/lib/zabbix/alertscripts:/usr/lib/zabbix/alertscripts:ro
+      - ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
+      - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
+      - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
+      - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+      - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+    restart: unless-stopped
+    env_file:
+      - .env_db_pgsql
+      - .env_srv
+    networks:
+      zabbix-net:
+        ipv4_address: 172.21.0.8 #指定IP地址
+
+
+  zabbix-web-nginx-pgsql:
+    image: zabbix/zabbix-web-apache-pgsql
+    container_name: zabbix-web-nginx-pgsql
+    ports:
+      - "51080:8080"
+      - "51443:8443"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./zbx_env/etc/ssl/nginx:/etc/ssl/nginx:ro
+      - ./simfang.ttf:/usr/share/zabbix/assets/fonts/DejaVuSans.ttf:ro
+    env_file:
+      - .env_db_pgsql
+      - .env_web
+    depends_on: #定义启动顺序, 等待某个服务启动后才启动
+      - zabbix-server
+    networks:
+      - zabbix-net
+
+
+  zabbix-java-gateway:
+    image: zabbix/zabbix-java-gateway
+    ports:
+      - "10052:10052"
+    env_file:
+      - .env_java
+    networks:
+      - zabbix-net
+
+
+  zabbix-agent: # 部署Agent端, 用来监控Service 所在的主机
+    image: zabbix/zabbix-agent
+    container_name: zabbix-agent
+    environment:
+      - ZBX_HOSTNAME=zabbix-server
+      - ZBX_SERVER_HOST=172.21.0.8
+    ports:
+      - "10050:10050"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./zbx_env/etc/zabbix/zabbix_agentd.d:/etc/zabbix/zabbix_agentd.d:ro
+      - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
+      - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
+      - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
+    env_file:
+      - .env_agent
+    privileged: true #特殊权限
+    pid: "host" #加入宿主机名称空间
+    networks:
+      - zabbix-net
+
+
+networks: # 自定义网络, 这样可以让服务之间用容器名访问对方.
+  zabbix-net:
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24  #IP网段
+
+
+
+
+
+
+
+
+  --------------------------------------------------------------------
+#下面暂时不用,  数据库单独搭建, agent 使用宿主机的方式.
+
+
+
+
+
+
+
+
+
+pgsql-server:
+  image: postgres:11
+  volumes:
+    - ./zbx_env/var/lib/postgresql/data:/var/lib/postgresql/data
+  env_file:
+    - .env_db_pgsql
+  restart: always
+  networks:
+    - zabbix-net
+
+
+
+
+
+
+
+
+
