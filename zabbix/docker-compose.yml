@@ -90,7 +90,7 @@ services:
       - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
     env_file:
       - .env_agent
-    privileged: true #特殊权限
+    privileged: true #特殊权限 拥有宿主机的root权限
     pid: "host" #加入宿主机名称空间
     networks:
       - zabbix-net
