@@ -1,0 +1,16 @@
+version: '3.5'
+services:
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin      # 配置 Grafana 的默认 admin 密码。
+    ports:
+      - "51002:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+
+
+volumes:
+  grafana:

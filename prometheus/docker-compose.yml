@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "59090:9090"
+    volumes:
+      - ./etc/prometheus:/etc/prometheus
