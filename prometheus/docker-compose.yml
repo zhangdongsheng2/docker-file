@@ -1,10 +1,77 @@
-version: '3.5'
+version: '3.7'
+
 services:
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    networks:
+      - prom
+
+  dingtalk:
+    image: timonwong/prometheus-webhook-dingtalk:latest
+    volumes:
+      - type: bind
+        source: ./alertmanager/config.yml
+        target: /etc/prometheus-webhook-dingtalk/config.yml
+        read_only: true
+    ports:
+      - "8060:8060"
+    networks:
+      - prom
+
+  alertmanager:
+    depends_on:
+      - dingtalk
+    image: prom/alertmanager:latest
+    volumes:
+      - type: bind
+        source: ./alertmanager/alertmanager.yml
+        target: /etc/alertmanager/alertmanager.yml
+        read_only: true
+    ports:
+      - "9093:9093"
+      - "9094:9094"
+    networks:
+      - prom
+
+
   prometheus:
+    depends_on:
+      - alertmanager
     image: prom/prometheus
     container_name: prometheus
+    command: "--web.read-timeout=5m --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.max-connections=512  --storage.tsdb.retention=30d  --query.timeout=2m"
     restart: unless-stopped
     ports:
       - "59090:9090"
+    #    volumes:
+    #      - ./etc/prometheus:/etc/prometheus
     volumes:
-      - ./etc/prometheus:/etc/prometheus
+      - type: bind
+        source: ./prometheus/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+        read_only: true
+      - type: bind
+        source: ./prometheus/alert-rules.yml
+        target: /etc/prometheus/alert-rules.yml
+        read_only: true
+      - type: volume
+        source: prometheus
+        target: /prometheus
+
+    networks:
+      - prom
+
+volumes:
+  prometheus:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/docker/prometheus/prometheus/data
+
+
+networks:
+  prom:
+    driver: bridge

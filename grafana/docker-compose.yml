@@ -8,9 +8,26 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin      # 配置 Grafana 的默认 admin 密码。
     ports:
       - "51002:3000"
+
     volumes:
       - grafana:/var/lib/grafana
-
+      - /etc/localtime:/etc/localtime
 
 volumes:
   grafana:
+
+
+
+
+#    volumes:
+#      - type: volume
+#        source: grafana
+#        target: /var/lib/grafana
+
+#volumes:
+#  grafana:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: /home/prom/grafana
