@@ -1,14 +1,14 @@
 version: '3.7'
 
 services:
-  node-exporter:
+  node-exporter: #pull 方式采集数据的组件
     image: prom/node-exporter:latest
     ports:
       - "9100:9100"
     networks:
       - prom
 
-  dingtalk:
+  dingtalk: # 发钉钉机器人消息的 组件
     image: timonwong/prometheus-webhook-dingtalk:latest
     volumes:
       - type: bind
@@ -20,7 +20,7 @@ services:
     networks:
       - prom
 
-  alertmanager:
+  alertmanager: #alertmanager 告警组件
     depends_on:
       - dingtalk
     image: prom/alertmanager:latest
@@ -35,7 +35,8 @@ services:
     networks:
       - prom
 
-  cadvisor:
+
+  cadvisor: # CAdvisor是Google开源的一款用于展示和分析容器运行状态的可视化工具。
     image: google/cadvisor:latest
     container_name: cadvisor
     volumes:
@@ -50,7 +51,7 @@ services:
 
 
 
-  prometheus:
+  prometheus: #服务端组件 核心组件
     depends_on:
       - alertmanager
     image: prom/prometheus
