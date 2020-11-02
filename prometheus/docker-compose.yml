@@ -8,6 +8,15 @@ services:
     networks:
       - prom
 
+  pushgateway: #push 方式采集数据的组件
+    image: prom/pushgateway
+    container_name: pushgateway
+    ports:
+      - "9091:9091"
+    networks:
+      - prom
+
+
   dingtalk: # 发钉钉机器人消息的 组件
     image: timonwong/prometheus-webhook-dingtalk:latest
     volumes:
