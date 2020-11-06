@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  nextcloud:
+    image: nextcloud:latest
+    ports:
+      - "20007:80"
+    volumes:
+      - ./data/nextcloud:/var/www/html:rw # moutn nextcloud files folder
+      - ./data:/data:rw # mount your personal data folder
+    restart: always
+
+# 在目录 data/nextcloud/data/admin/files  中可以自己添加文件或者文件夹
+#添加后以用户  -u www-data  进入容器执行命令: php occ files:scan --all  刷新文件目录
