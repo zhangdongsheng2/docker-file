@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  activename:
+    image: stilliard/pure-ftpd
+    container_name: ftpd_server
+    restart: always
+    ports:
+      - 20020-20021:20-21
+      - 30300-30309:30300-30309
+    environment:
+      PUBLICHOST: localhost
+    #定义挂载点
+    volumes:
+      - /home/ftp/conf:/etc/pure-ftpd/passwd
+      - /home/ftp/data:/home/ftpusers/www
+      - /home/ftp/data:/home/ftp
+    command: /bin/bash -c "useradd ftp;usermod -d /home/ftp ftp;/run.sh -c 100 -C 10 -l puredb:/etc/pure-ftpd/pureftpd.pdb -j -i -R -P 192.168.9.30 -p 30300:30309"
+
+
+# ftp://192.168.1.56:20021
+
+
