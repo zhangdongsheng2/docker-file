@@ -5,8 +5,8 @@ services:
     container_name: ftpd_server
     restart: always
     ports:
-      - 20020-20021:20-21
-      - 30300-30309:30300-30309
+      - 20030-20031:20-21
+      - 30330-30339:30330-30339
     environment:
       PUBLICHOST: localhost
     #定义挂载点
@@ -14,9 +14,10 @@ services:
       - /home/ftp/conf:/etc/pure-ftpd/passwd
       - /home/ftp/data:/home/ftpusers/www
       - /home/ftp/data:/home/ftp
-    command: /bin/bash -c "useradd ftp;usermod -d /home/ftp ftp;/run.sh -c 100 -C 10 -l puredb:/etc/pure-ftpd/pureftpd.pdb -j -i -R -P 192.168.9.30 -p 30300:30309"
+    command: /bin/bash -c "useradd ftp;usermod -d  /home/ftp ftp;/run.sh -c 100 -C 10 -l puredb:/etc/pure-ftpd/pureftpd.pdb -j -i -R -P 192.168.3.99 -p 30330:30339"
+
+  # ftp://192.168.1.56:20021
 
 
-# ftp://192.168.1.56:20021
 
 
