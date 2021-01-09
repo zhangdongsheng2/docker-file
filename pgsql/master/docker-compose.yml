@@ -25,7 +25,8 @@ services:
 
 
   # 修改配置文件 /data/psql/master/pg_hba.conf
-  文末尾加 ; host replication repuser 192.168.9.20/32 md5
+  # 文末尾加
+  host replication repuser 192.168.9.20/32 md5
 
   #修改postgresql.conf
   #对以下参数进行调整
