@@ -8,4 +8,8 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/webapp:/etc/nginx/webapp
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/file:/etc/nginx/file
     network_mode: host
+
