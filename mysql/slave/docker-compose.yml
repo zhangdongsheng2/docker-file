@@ -1,0 +1,40 @@
+
+
+version: '3'
+services:
+  mysql:
+    hostname: mysql
+    image: mysql:5.7.22
+    container_name: mysql # 指定容器名称，如果不设置此参数，则由系统自动生成
+    restart: unless-stopped # 设置容器自启模式
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci # 设置utf8字符集
+    environment:
+      - TZ=Asia/Shanghai # 设置容器时区与宿主机保持一致
+      - MYSQL_ROOT_PASSWORD=root # 设置root密码
+    volumes:
+      - "./db:/var/lib/mysql"
+      - "./conf/my.cnf:/etc/my.cnf"
+    ports:
+      - "3306:3306"
+
+
+---
+
+#主从数据库配置, 进入从数据库执行命令
+change master to master_host='172.17.0.2', master_user='slave', master_password='123456', master_port=3306, master_log_file='edu-mysql-bin.000001', master_log_pos=929, master_connect_retry=30;
+
+#主库执行 #查看状态
+#show master status;  可以看到下面的几个字段
+master_host: Master 的IP地址
+master_user: 在 Master 中授权的用于数据同步的用户
+master_password: 同步数据的用户的密码
+master_port: Master 的数据库的端口号
+master_log_file: 指定 Slave 从哪个日志文件开始复制数据，即上文中提到的 File 字段的值
+master_log_pos: 从哪个 Position 开始读，即上文中提到的 Position 字段的值
+master_connect_retry: 当重新建立主从连接时，如果连接失败，重试的时间间隔，单位是秒，默认是60秒。
+
+#查看同步状态
+show slave status \G;
+
+
+
