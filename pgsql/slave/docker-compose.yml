@@ -2,7 +2,7 @@ version: '3.5'
 services:
   timescaledb:
     image: timescale/timescaledb:1.7.1-pg12
-    container_name: basic-pg12slave
+    container_name: basic-postgresql
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -22,7 +22,7 @@ services:
   docker exec -it -u postgres pg12slave /bin/bash
   pg_basebackup -R -D /var/lib/postgresql/repl -Fp -Xs -v -P -h 192.168.9.30 -p 5432 -U repuser
   #备份成功，退出容器。
-
+  pg_basebackup -R -D /var/lib/postgresql/slave -Fp -Xs -v -P -h 192.168.130.73 -p 5433 -U repuser
   #通过上一步的初始备份，现在可以使用 /data/psql/repl 里的数据重建 slave容器了。
   #首先删除slave目录，然后将repl目录改为slave，这个目录就是从库的数据目录了。
   docker stop pg12slave && docker rm pg12slave

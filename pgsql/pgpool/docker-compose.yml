@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+  pgpool:
+    build: ./
+    ports:
+      - "8001:5432"
+    environment:
+      PCP_USER: pcp
+      PCP_PASSWORD: pcp_pwd
+      WAIT_BACKEND_TIMEOUT: 60
+      CHECK_USER: postgres
+      CHECK_PASSWORD: twdt8888
+      CHECK_PGCONNECT_TIMEOUT: 3
+      FAILOVER_COMMAND: /usr/local/etc/failover.sh %H %d
+      DB_USERS: postgres:twdt8888
+      BACKENDS: "0:192.168.130.73:5432:1:/var/lib/postgresql/data:ALLOW_TO_FAILOVER,1:192.168.130.77:5432:1:/var/lib/postgresql/data:ALLOW_TO_FAILOVER"
+      CONFIGS: "num_init_children:250,max_pool:4"
+#    depends_on:
+#      - postgres_standby
+    container_name: pgpool
+#    hostname: pgpool_container
+#    networks:
+#      pg_cluster:
+#        ipv4_address: 172.80.0.4
+    restart: always
