@@ -1,0 +1,25 @@
+version: "3"
+services:
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-ota2:s7-35
+    ports:
+      - "20181:20181"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      resources: 
+        limits:
+          memory: 5120M
+      placement:
+        constraints:
+          - node.hostname==docker6
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    extra_hosts:
+      - "nacos1:192.168.231.26"
+      - "nacos2:192.168.231.26"
+
+networks:
+  iot-net:
+    external: true

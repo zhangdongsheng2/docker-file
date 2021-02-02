@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+  iothub-p:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-prod/iothub-p-h5-yzj:s6-5
+    ports:
+      - "25000:80"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==docker6
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+      
+  iothub-b:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-prod/iothub-b-h5-yzj:s6-9
+    ports:
+      - "25001:80"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==docker6
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+     

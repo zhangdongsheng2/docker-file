@@ -1,0 +1,26 @@
+version: "3"
+services:
+
+  ms-db-upgrade:
+    image: 58.211.128.22:11111/prod/iothub/tool-db-upgrade:37
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "27000:27000"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+networks:
+  iot-net:
+    external: true

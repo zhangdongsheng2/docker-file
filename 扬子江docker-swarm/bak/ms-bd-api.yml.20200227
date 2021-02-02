@@ -1,0 +1,30 @@
+version: "3"
+services:
+      
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-bd-api:s6-91
+    ports:
+      - "20136:20136"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      - "hadoop1:192.168.231.31"
+      - "hadoop2:192.168.231.32"
+      - "hadoop3:192.168.231.33"
+      - "hadoop4:192.168.231.34"
+      - "hadoop5:192.168.231.35"
+
+networks:
+  iot-net:
+    external: true

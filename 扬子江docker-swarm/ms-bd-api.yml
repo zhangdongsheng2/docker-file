@@ -1,0 +1,31 @@
+version: "3"
+services:
+      
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-bd-api:s7-12
+    ports:
+      - "20136:20136"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 2G
+      placement:
+        constraints:
+          - node.hostname==docker2
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    extra_hosts:
+      - "nacos1:192.168.231.26"
+      - "nacos2:192.168.231.26"
+      - "hadoop1:192.168.231.31"
+      - "hadoop2:192.168.231.32"
+      - "hadoop3:192.168.231.33"
+      - "hadoop4:192.168.231.34"
+      - "hadoop5:192.168.231.35"
+
+networks:
+  iot-net:
+    external: true

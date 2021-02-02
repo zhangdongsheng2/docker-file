@@ -1,0 +1,240 @@
+version: "3"
+services:
+     
+  ms-region:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-dev/ms-region:latest
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20100:20100"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-rest-b:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-rest-b:s6-270
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20220:20220"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-rest-p:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-rest-p:s6-75
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20230:20230"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-alarm:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-alarm:s6-74
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20160:20160"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+
+  ms-content:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-content:s6-37
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20140:20140"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-thirdparty:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-dev/ms-thirdparty:latest
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20120:20120"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+
+  ms-bd-api:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-bd-api:s6-55
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20136:20136"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      - "hadoop1:192.168.231.31"
+      - "hadoop2:192.168.231.32"
+      - "hadoop3:192.168.231.33"
+      - "hadoop4:192.168.231.34"
+      - "hadoop5:192.168.231.35"
+  ms-bd:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-bd:s6-71
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20170:20170"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+
+  ms-ota:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-ota:s6-48
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20180:20180"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+
+  ms-job:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-job:s6-46
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20360:20360"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+                                               
+networks:
+  iot-net:
+    external: true

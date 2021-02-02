@@ -1,0 +1,96 @@
+version: "3"
+services:
+     
+  ms-emq-extractor:
+    image: 58.211.128.22:11111/test/iothub/ms-emq-extractor:s6-110
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20156:20156"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-foo-gen:
+    image: 58.211.128.22:11111/test/iothub/ms-foo-gen:s6-92
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20157:20157"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+
+  ms-open-api:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-dev/open-api:s6-158
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20300:20300"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-streaming-calibration:
+    image: 58.211.128.22:11111/test/iothub/ms-streaming-calibration:25
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20158:20158"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      - "config1:192.168.231.26"
+                                                      
+networks:
+  iot-net:
+    external: true

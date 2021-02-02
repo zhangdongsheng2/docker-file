@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+     
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-prod/ms-job-plus-java:s8-28
+    ports:
+      - "20361:20361"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==docker2
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    extra_hosts:
+      - "nacos1:192.168.231.26"
+      - "nacos2:192.168.231.26"
+                                               
+networks:
+  iot-net:
+    external: true

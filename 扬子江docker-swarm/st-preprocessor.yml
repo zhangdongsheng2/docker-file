@@ -1,0 +1,23 @@
+version: "3"
+services:
+     
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/st-preprocessor:s7-13
+    ports:
+      - "20159:20159"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==docker4
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    extra_hosts:
+      - "nacos1:192.168.231.26"
+      - "nacos2:192.168.231.26"
+                                                      
+networks:
+  iot-net:
+    external: true

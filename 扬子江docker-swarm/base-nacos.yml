@@ -1,0 +1,59 @@
+version: "3"
+
+services:
+  nacos1:
+    hostname: nacos1
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-prod/nacos-server:2020-02-19
+    networks:
+      - nacos-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role==manager
+    environment:
+      - "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=*"
+    volumes:
+      - nacos1-log:/home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9555:9555"
+    env_file:
+      - ./env/nacos-hostname.env
+
+  nacos2:
+    hostname: nacos2
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-prod/nacos-server:2020-02-19
+    networks:
+      - nacos-net
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.role==manager
+    environment:
+      - "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE=*"
+    volumes:
+      - nacos2-log:/home/nacos/logs
+    ports:
+      - "8849:8848"
+    env_file:
+      - ./env/nacos-hostname.env
+
+volumes:
+  nacos1-log:
+  nacos2-log:
+
+networks:
+  nacos-net:
+    external: true

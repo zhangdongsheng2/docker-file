@@ -1,0 +1,75 @@
+version: "3"
+services:
+     
+  ms-emq-extractor:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-emq-extractor:s6-77
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20156:20156"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 3
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-foo-gen:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-foo-gen-prod:s6-82
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20157:20157"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+
+  ms-open-api:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-dev/open-api:s6-118
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20300:20300"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.1:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+                                                      
+networks:
+  iot-net:
+    external: true

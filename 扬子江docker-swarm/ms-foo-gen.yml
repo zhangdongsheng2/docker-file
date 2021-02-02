@@ -1,0 +1,27 @@
+version: "3"
+services:
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-foo-gen:s7-17
+    depends_on:
+      - config-server
+      - ms-auth
+      - gateway
+    ports:
+      - "20154:20154"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.hostname==docker3
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    extra_hosts:
+      - "nacos1:192.168.231.26"
+      - "nacos2:192.168.231.26"
+
+networks:
+  iot-net:
+    external: true
+

@@ -1,0 +1,89 @@
+version: "3"
+services:
+
+  config-server:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/config-server:s6-55
+    ports:
+      - "20010:20010"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+    extra_hosts: 
+      - "eureka1:192.168.231.21"
+      
+  ms-auth:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/ms-auth:s6-190
+    depends_on:
+      - config-server
+    ports:
+      - "20030:20030"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"    
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      
+  ms-gateway:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/gateway:s6-122
+    depends_on:
+      - config-server
+      - ms-auth
+    ports:
+      - "20020:20020"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      - "eureka2:192.168.231.21"
+
+  ms-actuator-admin:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/actuator-admin:s6-20
+    depends_on:
+      - config-server
+    ports:
+      - "20040:20040"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"
+      - "eureka2:192.168.231.21"      
+
+                
+networks:
+  iot-net:
+    external: true

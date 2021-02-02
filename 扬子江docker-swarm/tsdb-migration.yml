@@ -1,0 +1,28 @@
+version: "3"
+services:
+      
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-test/tsdb-migration:8
+    ports:
+      - "27002:27002"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==docker6
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod"
+    extra_hosts:
+      - "nacos1:192.168.231.26"
+      - "nacos2:192.168.231.26"
+      - "hadoop1:192.168.231.31"
+      - "hadoop2:192.168.231.32"
+      - "hadoop3:192.168.231.33"
+      - "hadoop4:192.168.231.34"
+      - "hadoop5:192.168.231.35"
+
+networks:
+  iot-net:
+    external: true

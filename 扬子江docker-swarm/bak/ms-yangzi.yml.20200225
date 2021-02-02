@@ -1,0 +1,23 @@
+version: "3"
+services:
+  java:
+    image: registry.cn-hangzhou.aliyuncs.com/iothub-dev/ms-yangzi:155
+    ports:
+      - "21000:21000"
+    networks:
+      - iot-net
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.role==worker
+    environment:
+      - "SPRING_PROFILES_ACTIVE=prod-yangzijiang"
+      - "SPRING_CLOUD_CONFIG_PROFILE=prod-yangzijiang"
+      - "EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://192.168.231.21:20000/eureka/"
+      - "SPRING_CLOUD_CONFIG_URI=http://192.168.231.26:20010"
+    extra_hosts:
+      - "eureka1:192.168.231.21"      
+networks:
+  iot-net:
+    external: true
