@@ -2,7 +2,10 @@ version: '3.5'
 services:
  redis:
   image: redis:latest
-  container_name: wxwl_redis
+  container_name: base_redis
+  # command: redis-server --requirepass yourpassword
+
+
   ports:
     - "6379:6379"
   volumes:
@@ -10,4 +13,4 @@ services:
     # 替换容器内redis.conf
     - ./conf/redis.conf:/usr/local/etc/redis/redis.conf
 
-  docker run --name base-redis -p 6379:6379 -v /opt/redis/docker-conf/redis.conf:/opt/redis/conf/redis.conf -v
+  # docker run --name base-redis -p 6379:6379 -v /opt/redis/docker-conf/redis.conf:/opt/redis/conf/redis.conf -v

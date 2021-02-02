@@ -1,0 +1,17 @@
+version: '3.5'
+services:
+
+  nginx:
+    image: jenkinsci/blueocean
+    container_name: basic-jenkinsci
+    restart: always
+    user: root
+    ports:
+      - "8000:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime
+
+

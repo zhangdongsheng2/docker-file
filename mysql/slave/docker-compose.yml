@@ -21,7 +21,7 @@ services:
 ---
 
 #主从数据库配置, 进入从数据库执行命令
-change master to master_host='172.17.0.2', master_user='slave', master_password='123456', master_port=3306, master_log_file='edu-mysql-bin.000001', master_log_pos=929, master_connect_retry=30;
+change master to master_host='192.168.130.70', master_user='slave', master_password='123456', master_port=3306, master_log_file='mysql-bin.000003', master_log_pos=609, master_connect_retry=30;
 
 #主库执行 #查看状态
 #show master status;  可以看到下面的几个字段
@@ -33,8 +33,15 @@ master_log_file: 指定 Slave 从哪个日志文件开始复制数据，即上�
 master_log_pos: 从哪个 Position 开始读，即上文中提到的 Position 字段的值
 master_connect_retry: 当重新建立主从连接时，如果连接失败，重试的时间间隔，单位是秒，默认是60秒。
 
+
+#执行命令启动同步
+start slave;
+
 #查看同步状态
-show slave status \G;
+show slave status;
+
+SlaveIORunning 和 SlaveSQLRunning 是No，表明 Slave 还没有开始复制过程。
+相反 SlaveIORunning 和 SlaveSQLRunning 是Yes表明已经开始工作了。
 
 
 

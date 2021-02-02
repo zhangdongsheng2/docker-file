@@ -2,12 +2,12 @@ version: '3.5'
 services:
   timescaledb:
     image: timescale/timescaledb:1.7.1-pg12
-    container_name: basic-pg12master
+    container_name: basic-postgresql
     restart: unless-stopped
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: wxwl8802
+      POSTGRES_PASSWORD: twdt8888
       LANG: "C.UTF-8"
       TZ: Asia/Shanghai
     volumes:
@@ -39,7 +39,10 @@ services:
 # 重启主库
 
 
-
+#======================================
+#问题记录
+#1. 从库执行 SELECT pg_promote(true,60); 升级为主库, 结果无法写入数据.configs:
+    #启动主库后也无法写入数据. 解决方式: 删除主库的所有从库配置, 重启主库为单节点库, 然后重写配置,重建从库. or 直接重建从库.
 
 
 
