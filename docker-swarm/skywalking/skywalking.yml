@@ -1,0 +1,84 @@
+version: '3.3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+    hostname: elasticsearch
+    ports:
+      - 9200:9200
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==service7
+      restart_policy: #配置如何在退出容器时重新启动容器。
+        condition: on-failure #可选 none，on-failure 或者 any（默认值：any）。 无条件,失败,所有.
+        delay: 5s #设置多久之后重启（默认值：0）。
+        max_attempts: 3 #尝试重新启动容器的次数，超出次数，则不再尝试（默认值：一直重试）。
+        window: 120s #设置容器重启超时时间（默认值：0）。
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+
+  skywalking-oap:
+    image: apache/skywalking-oap-server:6.6.0-es7
+    hostname: skywalking-oap
+    depends_on:
+      - elasticsearch
+    ports:
+      - 11800:11800
+      - 12800:12800
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==service7
+      restart_policy: #配置如何在退出容器时重新启动容器。
+        condition: on-failure #可选 none，on-failure 或者 any（默认值：any）。 无条件,失败,所有.
+        delay: 5s #设置多久之后重启（默认值：0）。
+        max_attempts: 3 #尝试重新启动容器的次数，超出次数，则不再尝试（默认值：一直重试）。
+        window: 120s #设置容器重启超时时间（默认值：0）。
+    environment:
+      - SW_STORAGE=elasticsearch
+      - SW_STORAGE_ES_CLUSTER_NODES=elasticsearch:9200
+
+
+  skywalking-ui:
+    image: apache/skywalking-ui:6.6.0
+    hostname: skywalking-ui
+    depends_on:
+      - skywalking-oap
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==service7
+      restart_policy: #配置如何在退出容器时重新启动容器。
+        condition: on-failure #可选 none，on-failure 或者 any（默认值：any）。 无条件,失败,所有.
+        delay: 5s #设置多久之后重启（默认值：0）。
+        max_attempts: 3 #尝试重新启动容器的次数，超出次数，则不再尝试（默认值：一直重试）。
+        window: 120s #设置容器重启超时时间（默认值：0）。
+    ports:
+      - 8480:8080
+    environment:
+      - SW_OAP_ADDRESS=skywalking-oap:12800
+
+
+
+networks:
+  tw-cloud:
+    external: true
+
+
+
