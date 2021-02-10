@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+  sentinel-dashboard:
+    image: registry.cn-shanghai.aliyuncs.com/twdt/sentinel:1
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname==service7
+      restart_policy: #配置如何在退出容器时重新启动容器。
+        condition: on-failure #可选 none，on-failure 或者 any（默认值：any）。 无条件,失败,所有.
+        delay: 5s #设置多久之后重启（默认值：0）。
+        max_attempts: 3 #尝试重新启动容器的次数，超出次数，则不再尝试（默认值：一直重试）。
+        window: 120s #设置容器重启超时时间（默认值：0）。
+    ports:
+      - "8718:8080"
+    environment:
+      - JAVA_OPTS=-Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard
+
+
+networks:
+  tw-cloud:
+    external: true
+
+
+  java -Dserver.port=8080 -Dcsp.sentinel.dashboard.server=localhost:8080 -Dproject.name=sentinel-dashboard -jar sentinel-dashboard-1.8.0.jar
