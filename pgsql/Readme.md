@@ -36,6 +36,8 @@ select pg_promote(true,60)
 ```
 3. 主节点重启为从节点
    以“postgres”用户创建“/app/pgsql/data/standby.signal”文件，添加内容：standby_mode = 'on'
+   然后同步一下主库的数据: rsync -r slave/ root@192.168.130.77:/home/twdt/docker/postgresql/data/psql/master/
+   同步后修改 postgresql.auto.conf 文件中的IP地址. 然后启动数据库. 
 4. 如果重启主节点仍然当主库使用
 
 * 停止所有服务
