@@ -1,0 +1,23 @@
+version: '3.5'
+services:
+  redis-6373: # 服务名称
+    image: redis:latest # 创建容器时所需的镜像
+    container_name: redis-6373 # 容器名称
+    restart: always # 容器总是重新启动
+    network_mode: "host" # host 网络模式
+    volumes:
+      - ./data-6373:/data
+      # 替换容器内redis.conf
+      - ./conf-6373/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf # 覆盖容器启动后默认执行的命令
+
+  redis-6377:
+    image: redis:latest
+    container_name: redis-6377
+    restart: always # 容器总是重新启动
+    network_mode: "host"
+    volumes:
+      - ./data-6377:/data
+      # 替换容器内redis.conf
+      - ./conf-6377/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
