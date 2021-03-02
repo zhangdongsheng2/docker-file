@@ -1,0 +1,86 @@
+version: "3"
+
+services:
+  nacos1:
+    hostname: nacos1
+    image: nacos/nacos-server:latest
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.hostname==service3
+    volumes:
+      - nacos1-log:/home/nacos/logs
+    ports:
+      - "8838:8848"
+      - "9555:9555"
+    env_file:
+      - ./nacos-hostname.env
+
+
+  nacos2:
+    hostname: nacos2
+    image: nacos/nacos-server:latest
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.hostname==service7
+    volumes:
+      - nacos2-log:/home/nacos/logs
+    ports:
+      - "8848:8848"
+    env_file:
+      - ./nacos-hostname.env
+
+  nacos3:
+    hostname: nacos3
+    image: nacos/nacos-server:latest
+    networks:
+      - tw-cloud
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints:
+          - node.hostname==service8
+    volumes:
+      - nacos3-log:/home/nacos/logs
+    ports:
+      - "8858:8848"
+    env_file:
+      - ./nacos-hostname.env
+
+
+
+
+networks:
+  tw-cloud:
+    external: true
+
+
+
+
+volumes:
+  nacos1-log:
+  nacos2-log:
+  nacos3-log:
+

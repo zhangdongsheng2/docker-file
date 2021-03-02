@@ -10,7 +10,7 @@ services:
     deploy:
       replicas: 1
       placement:
-        constraints:
+        constraints: #指定容器运行在哪个节点, 不写就自动分配
           - node.hostname==service7
       restart_policy: #配置如何在退出容器时重新启动容器。
         condition: on-failure #可选 none，on-failure 或者 any（默认值：any）。 无条件,失败,所有.
