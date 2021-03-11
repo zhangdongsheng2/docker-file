@@ -20,6 +20,10 @@ https://github.com/guozizi/pg_cluster
 5. 把pgpool中的 id_rsa.pub 拷贝到对应机器做免密登陆.
 6. 修改./pgpool/docker-compose.yml 中的对应ip.
 7. 启动pgpool.
+
+
+
+
 ### 问题
 1. 查询节点信息. 进入容器执行命令;
 ```shell
@@ -69,5 +73,8 @@ select pg_promote(true,60)
    https://app.yinxiang.com/shard/s9/nl/16674383/0fa0d9e8-80b7-47ec-80cf-16e8086878b3
 
 
-
+10. pgpool 偶尔出现连不上, 需要重启容器.
+    pgpool-bitnami 这个镜像不能使用, 无法做到ha, 挂了一个就不能用了, 重启也不能做到副节点转主节点. 
+    
+    ======结论: 要么自己制作镜像. 要么不适用pgpool了. 正常情况主从就行了, 在高点要求就用VIP做HA.=========
 
