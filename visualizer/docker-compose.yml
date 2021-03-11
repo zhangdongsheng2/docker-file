@@ -1,0 +1,10 @@
+version: "2"
+services:
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8808:8080"
+    stop_grace_period: 1m30s
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"

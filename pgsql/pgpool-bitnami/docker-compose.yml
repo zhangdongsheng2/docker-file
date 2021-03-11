@@ -1,0 +1,23 @@
+version: '3.5'
+services:
+  pgpool:
+    build: ./
+    ports:
+      - "8002:5432"
+    environment:
+      - PGPOOL_BACKEND_NODES=0:192.168.130.73:5432,1:192.168.130.77:5432
+      - PGPOOL_SR_CHECK_USER=postgres
+      - PGPOOL_SR_CHECK_PASSWORD=twdt8888
+      - PGPOOL_ENABLE_LDAP=no
+      - PGPOOL_POSTGRES_USERNAME=postgres
+      - PGPOOL_POSTGRES_PASSWORD=twdt8888
+      - PGPOOL_ADMIN_USERNAME=admin
+      - PGPOOL_ADMIN_PASSWORD=twdt8888
+      - FAILOVER_COMMAND=/usr/local/etc/failover.sh %H %d
+    container_name: pgpool-bitnami
+    healthcheck:
+      test: [ "CMD", "/opt/bitnami/scripts/pgpool/healthcheck.sh" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
