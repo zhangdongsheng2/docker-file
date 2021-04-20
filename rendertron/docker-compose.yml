@@ -1,0 +1,8 @@
+version: "2.1"
+services:
+  rendertron:
+    image: ammobindotca/rendertron
+    restart: always
+    container_name: rendertron
+    ports:
+      - '3003:3000'
