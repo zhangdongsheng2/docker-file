@@ -1,0 +1,13 @@
+cluster.name: elasticsearch-cluster
+node.name: es-node1
+network.bind_host: 0.0.0.0
+network.publish_host: 192.168.188.207
+http.port: 9200
+transport.tcp.port: 9300
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+node.master: true
+node.data: true
+discovery.zen.ping.unicast.hosts: ["192.168.188.207:9300","192.168.188.207:9301","192.168.188.207:9302"]
+cluster.initial_master_nodes: ["es-node1","es-node2","es-node3"]
+discovery.zen.minimum_master_nodes: 1
