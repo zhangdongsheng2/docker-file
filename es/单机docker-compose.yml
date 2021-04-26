@@ -1,0 +1,54 @@
+version: '2.2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:  #最大和最小内存锁
+        soft: -1
+        hard: -1
+    volumes:
+      - data_single:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - elastic_single
+
+
+
+  kibana:
+    image: kibana:7.5.2
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      # 需要将Kibana配置文件中的小写转换成大写，然后这个才能用于变量，才能被设置到
+      - I18N_LOCALE=zh-CN
+      - xpack.monitoring.ui.container.elasticsearch.enabled=false
+    ports:
+      - 5601:5601
+    networks:
+      - elastic_single
+
+  head:
+    image: mobz/elasticsearch-head:5
+    container_name: head
+    ports:
+      - 9100:9100
+    networks:
+      - elastic_single
+
+
+volumes:
+  data_single:
+    driver: local
+
+networks:
+  elastic_single:
+    driver: bridge
+
