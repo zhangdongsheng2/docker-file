@@ -1,0 +1,4 @@
+cluster.name: elasticsearch-cluster
+node.name: es-node
+network.host: 0.0.0.0
+xpack.security.enabled: false
