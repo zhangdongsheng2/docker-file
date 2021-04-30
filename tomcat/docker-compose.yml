@@ -1,0 +1,11 @@
+version: '2.2'
+services:
+  tomcat: # 服务名称
+    image: tomcat:latest # 创建容器时所需的镜像
+    container_name: tomcat # 容器名称
+    restart: always # 容器总是重新启动
+    ports:
+      - 10080:8080
+    volumes:
+      - ./ROOT.war:/usr/local/tomcat/webapps/ROOT.war
+      - ./log:/usr/local/log/
