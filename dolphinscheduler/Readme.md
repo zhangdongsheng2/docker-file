@@ -6,4 +6,5 @@
 启动之前先执行数据库初始化, 文件在apache-dolphinscheduler-1.3.6-src\sql\dolphinscheduler_postgre.sql
 
 
+#有很多的不方便, 建议真机部署.
 
