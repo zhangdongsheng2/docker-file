@@ -4,6 +4,9 @@
 * 配置连接数: command: "postgres -c 'max_connections=10800'" 
   * 添加到文件末尾即可, 相当与修改了启动命令.
 * docker-compose up -d
+* 使用的镜像: https://hub.docker.com/r/timescale/timescaledb
+  * https://docs.timescale.com/timescaledb/latest/how-to-guides/install-timescaledb/self-hosted/docker/installation-docker/
+  * 基于的镜像: https://hub.docker.com/_/postgres
 
 # 主从搭建
 
