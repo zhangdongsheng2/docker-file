@@ -1,7 +1,9 @@
 # 单机版搭建
 直接启动 ./docker-compose.yml 即可
 
-docker-compose up -d
+* 配置连接数: command: "postgres -c 'max_connections=10800'" 
+  * 添加到文件末尾即可, 相当与修改了启动命令.
+* docker-compose up -d
 
 # 主从搭建
 
