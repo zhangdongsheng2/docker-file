@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+
+  kafka-test:
+    image: registry.cn-shanghai.aliyuncs.com/zhangdongsheng/kafka-k8s:2.0
+    container_name: basic-test-kafka
+    restart: always
+    command: "tail -f /dev/null"
+
+
