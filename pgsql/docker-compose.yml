@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   timescaledb:
-    image: timescale/timescaledb:1.7.1-pg12
+    image: timescale/timescaledb:2.3.1-pg12
     container_name: basic-timescaledb
     restart: unless-stopped
     ports:
@@ -11,3 +11,5 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data
     command: "postgres -c 'max_connections=10800'"
+
+
