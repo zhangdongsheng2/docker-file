@@ -9,7 +9,14 @@ services:
     environment:
       POSTGRES_PASSWORD: wxwl8802
     volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
       - ./data:/var/lib/postgresql/data
-    command: "postgres -c 'max_connections=10800'"
-
-
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=10800"
+      - "-c"
+      - "log_timezone=Asia/Shanghai"
+      - "-c"
+      - "timezone=Asia/Shanghai"
