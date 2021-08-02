@@ -3,7 +3,7 @@ proxy_buffers 100 128k;
 
 server {
     listen       80;
-    server_name  thingsinfo.cn www.thingsinfo.cn;
+    server_name  doba.twgiot.com;
 
 	location / {
 
@@ -15,9 +15,33 @@ server {
 		proxy_read_timeout          1m;
 		proxy_connect_timeout       1m;
 
-	    proxy_pass   http://127.0.0.1:3000; # set the address of the Node.js instance here
+	    proxy_pass   http://127.0.0.1:30082; # set the address of the Node.js instance here
 
 	}
 
+}
+#把https也重定向到http，必须要有证书才能转发。大部分情况不需要。
+server {
+        listen       443 ssl;
+        server_name  doba.twgiot.com;
+
+        gzip            on;
+        gzip_types      text/plain application/xml text/css application/javascript;
+        gzip_min_length 1000;
+
+        #ssl on;
+        #配置证书的路径
+        ssl_certificate      /etc/nginx/ssl/4173188_thingsinfo.cn.pem;
+        ssl_certificate_key  /etc/nginx/ssl/4173188_thingsinfo.cn.key;
+        #ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+        ssl_ciphers  ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers  on;
+
+        rewrite ^(.*)$ http://${server_name}$1 permanent;
+        #其实应该配置到这里就可以了，将80端口的访问转发到443端口
+        #charset koi8-r;
+        #access_log  logs/host.access.log  main;
 }
 

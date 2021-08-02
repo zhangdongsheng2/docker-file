@@ -7,16 +7,22 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: wxwl8802
+      POSTGRES_PASSWORD: twdt8888
+      LANG: "C.UTF-8"
+      TZ: Asia/Shanghai
+      PGTZ: Asia/Shanghai
     volumes:
       - /etc/timezone:/etc/timezone
       - /etc/localtime:/etc/localtime
       - ./data:/var/lib/postgresql/data
+      - ./repl:/var/lib/postgresql/repl
     command:
       - "postgres"
       - "-c"
       - "max_connections=10800"
-      - "-c"
-      - "log_timezone=Asia/Shanghai"
-      - "-c"
-      - "timezone=Asia/Shanghai"
+
+
+#      - "-c"
+#      - "log_timezone=Asia/Shanghai"
+#      - "-c"
+#      - "timezone=Asia/Shanghai"
