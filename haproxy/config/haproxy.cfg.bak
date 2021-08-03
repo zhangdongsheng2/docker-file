@@ -1,0 +1,48 @@
+global
+    daemon
+    maxconn 30000
+    log 127.0.0.1 local0 info
+    log 127.0.0.1 local1 warning
+defaults
+	mode http
+	option http-keep-alive
+	option httplog
+	timeout connect 5000ms
+	timeout client 10000ms
+	timeout server 50000ms
+	timeout http-request 20000ms
+	timeout tunnel 1h
+	timeout client-fin 30s
+               	
+#统计配置
+listen stats
+	bind *:1011
+	stats enable
+	stats refresh 30s             #每30秒更新监控数据
+	stats hide-version
+	stats uri /stats              #访问监控页面的uri
+	stats realm HAProxy\ Stats    #监控页面的认证提示
+	stats auth admin:admin@123   #监控页面的用户名和密码
+
+listen cmf #相当于 frontend + backend
+    bind *:37180
+    mode tcp
+    option tcplog
+    server cmfhttp1 cdh1.tw9.com:7180 weight 10 check inter 3s fall 3 rise 5
+    server cmfhttp2 cdh9.tw9.com:7180 weight  5 check inter 3s fall 3 rise 5
+
+listen cmfavro 
+    bind *:37182
+    mode tcp
+    option tcplog
+    server cmfavro1 cdh1.tw9.com:7182  weight 10 check inter 3s fall 3 rise 5
+    server cmfavro2 cdh9.tw9.com:7182  weight  5 check inter 3s fall 3 rise 5
+
+#ssl pass-through, without termination
+listen cmfhttps 
+    bind *:37183
+    mode tcp
+    option tcplog
+    server cmfhttps1 cdh1.tw9.com:7183  weight 10 check inter 3s fall 3 rise 5
+    server cmfhttps2 cdh9.tw9.com:7183  weight  5 check inter 3s fall 3 rise 5
+

@@ -1,0 +1,48 @@
+global
+    daemon
+    maxconn 30000
+    log 127.0.0.1 local0 info
+    log 127.0.0.1 local1 warning
+defaults
+    mode http
+    option http-keep-alive
+    option httplog
+    timeout connect 5000ms
+    timeout client 10000ms
+    timeout server 50000ms
+    timeout http-request 20000ms
+    timeout tunnel 1h
+    timeout client-fin 30s
+
+
+#统计配置
+listen stats
+    bind *:1011
+    stats enable
+    stats refresh 30s             #每30秒更新监控数据
+    stats hide-version
+    stats uri /stats              #访问监控页面的uri
+    stats realm HAProxy\ Stats    #监控页面的认证提示
+    stats auth admin:admin@123   #监控页面的用户名和密码
+#mqtt-broker基于TCP的负载均衡配置
+listen mqtt-in
+    bind *:1883
+    mode tcp
+    option clitcpka # For TCP keep-alive
+    timeout client 3h
+    timeout server 3h
+    option tcplog
+    balance leastconn #balance用来定义负载均衡算法，当前使用负载均衡算法为leastconn，此算法会将新的连接请求转发到具有最少连接数目的后端服务器。在会话时间较长的场景中推荐使用此算法，例如数据库负载均衡等。此算法不  适合会话较短的环境中，例如基于 HTTP 的应用。
+    server tbMqtt1 10.1.1.153:1883 check inter 5s
+    server tbMqtt2 10.1.1.50:1883 check inter 5s
+#http负载均衡配置，frontend用于设置接收用户请求的前端虚拟节点
+frontend http-in
+    bind *:1088
+    default_backend tb-backend #指定默认的后端服务器池，也就是指定一组后端真实服务器，而这些真实服务器组将在 backend 段进行定义
+#backend用于设置后端服务集群的配置，也就是用来添加一组真实服务器，以处理前端用户的请求
+backend tb-backend
+    balance leastconn
+    option tcp-check
+    option log-health-checks
+    server tb1 10.1.1.153:8080 check inter 5s #处理业务的真实服务器地址
+    server tb2 10.1.1.50:8080 check inter 5s #处理业务的真实服务器地址
