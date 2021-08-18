@@ -7,7 +7,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: twdt8888
+      POSTGRES_PASSWORD: Twdt@8888.cn
       LANG: "C.UTF-8"
       TZ: Asia/Shanghai
       PGTZ: Asia/Shanghai
