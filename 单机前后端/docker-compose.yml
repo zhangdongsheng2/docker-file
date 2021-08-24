@@ -1,0 +1,63 @@
+version: '3.3'
+# docker-compose restart base-api 重启服务端
+services:
+  #服务端
+  base-api:
+    image: twdt_io:2.0
+    container_name: twdt-api
+    networks:
+      - subject-net
+    env_file:
+      - common.env
+    volumes:
+      - ./api.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+  #前端
+  base-web:
+    image: twdt_web:2.0
+    container_name: twdt-web
+    networks:
+      - subject-net
+    environment:
+      - NAME=twdt-nginx-web
+    env_file:
+      - common.env
+    volumes:
+      - ./web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+
+  #数据库
+  timescaledb:
+    image: timescale/timescaledb:2.3.1-pg12
+    container_name: basic-timescaledb
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: Twdt@8888.cn
+      LANG: "C.UTF-8"
+      TZ: Asia/Shanghai
+      PGTZ: Asia/Shanghai
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ./data:/var/lib/postgresql/data
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=10800"
+
+
+#自定义网络
+networks:
+  subject-net:
+    ipam:
+      config:
+        - subnet: 172.130.130.0/24
+
+
+
+
+
+
+
