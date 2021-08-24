@@ -3,8 +3,11 @@ version: '3.3'
 services:
   #服务端
   base-api:
-    image: twdt_io:2.0
+    build: java/.
+    #image: twdt_io:2.0
     container_name: twdt-api
+    ports:
+      - "8081:8081"
     networks:
       - subject-net
     env_file:
@@ -14,10 +17,13 @@ services:
 
   #前端
   base-web:
-    image: twdt_web:2.0
+    build: nginx/.
+    #image: twdt_web:2.0
     container_name: twdt-web
     networks:
       - subject-net
+    ports:
+      - "80:80"
     environment:
       - NAME=twdt-nginx-web
     env_file:
