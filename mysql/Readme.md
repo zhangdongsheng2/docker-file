@@ -19,3 +19,14 @@ start slave;
 show slave status;
 #主库
 unlock tables;
+
+#删除主从
+stop slave;
+reset slave all;
+show slave status;
+
+（主库执行-清除主库信息）
+reset master;
+
+
+
