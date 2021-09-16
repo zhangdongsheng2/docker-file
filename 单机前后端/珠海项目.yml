@@ -1,0 +1,101 @@
+version: '3.3'
+# docker-compose restart base-api 重启服务端
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+services:
+  #服务端
+  base-api:
+    build: java/.
+    container_name: base-api
+    ports:
+      - "30020:8081"
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./twdt-api.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+  #服务端
+  base-admin:
+    build: java/.
+    container_name: base-admin
+    ports:
+      - "30021:8089"
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./twdt-admin.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+  #服务端
+  datav-api:
+    build: java/.
+    container_name: datav-api
+    ports:
+      - "8083:8083"
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./bus-server-zhh-1.0.0.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+  #服务端
+  crontab-service:
+    build: java/.
+    container_name: crontab-service
+    ports:
+      - "8082:8082"
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./bus-crontab-zhh-1.0.0.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+
+
+  #前端
+  base-web-admin:
+    build: nginx/.
+    container_name: base-web-admin
+    networks:
+      - sjs-net
+    ports:
+      - "30023:80"
+    environment:
+      - NAME=zhuhai-nginx-web
+    env_file:
+      - common.env
+    volumes:
+      - ./web-admin:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+  #前端
+  base-web:
+    build: nginx/.
+    container_name: base-web
+    networks:
+      - sjs-net
+    ports:
+      - "30024:80"
+    environment:
+      - NAME=zhuhai-nginx-web
+    env_file:
+      - common.env
+    volumes:
+      - ./web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
+
+
+
+
+
+
