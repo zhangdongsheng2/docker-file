@@ -64,8 +64,6 @@ services:
       - sjs-net
     ports:
       - "30023:80"
-    environment:
-      - NAME=zhuhai-nginx-web
     env_file:
       - common.env
     volumes:
@@ -79,8 +77,6 @@ services:
       - sjs-net
     ports:
       - "30024:80"
-    environment:
-      - NAME=zhuhai-nginx-web
     env_file:
       - common.env
     volumes:

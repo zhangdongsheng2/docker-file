@@ -1,11 +1,11 @@
 version: '3.3'
 # docker-compose restart base-api 重启服务端
-# docker network create --driver=bridge --subnet=172.130.130.0/24 sjs-net
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
 services:
   #服务端
   base-api:
     build: java/.
-    container_name: sjs-api
+    container_name: base-api
     ports:
       - "8081:8081"
     networks:
@@ -18,13 +18,11 @@ services:
   #前端
   base-web:
     build: nginx/.
-    container_name: sjs-web
+    container_name: base-web
     networks:
       - sjs-net
     ports:
       - "80:80"
-    environment:
-      - NAME=sjs-nginx-web
     env_file:
       - common.env
     volumes:
