@@ -1,19 +1,19 @@
 version: '3'
 services:
   gitlab:
-    image: 'gitlab/gitlab-ce:8.8.5-ce.1'
+    image: 'gitlab/gitlab-ce:13.12.11-ce.0'
     restart: always
     container_name: gitlab
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://192.168.130.78:8929' # http协议所使用的访问地址，ip是本机ip地址，默认80端口
-        gitlab_rails['gitlab_shell_ssh_port']=2224 # 此端口是run时22端口映射的2224端口
+        external_url 'http://192.168.130.78:38929' # http协议所使用的访问地址，ip是本机ip地址，默认80端口
+        gitlab_rails['gitlab_shell_ssh_port']=32222 # 此端口是run时22端口映射的2224端口
         unicorn['port']=9011
         unicorn['listen']='127.0.0.1'
     privileged: true
     ports:
-      - 8929:8929
-      - 2224:2224
+      - 38929:38929
+      - 32222:32222
     volumes:
       - ./config:/etc/gitlab
       - ./logs:/var/log/gitlab

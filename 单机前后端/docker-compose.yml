@@ -22,7 +22,7 @@ services:
     networks:
       - sjs-net
     ports:
-      - "80:80"
+      - "8080:80"
     env_file:
       - common.env
     volumes:
