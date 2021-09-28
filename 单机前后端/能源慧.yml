@@ -12,6 +12,8 @@ services:
       - common.env
     volumes:
       - ./lrd-admin.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+      - ./application-dev.yml:/application-dev.yml  #打包的 jar 包按照名字放同级目录，然后重启服务
+#      - ./application-dev.yml:/config/application-dev.yml  #打包的 jar 包按照名字放同级目录，然后重启服务
 
   #前端
   new-biz-web:
@@ -20,7 +22,7 @@ services:
     networks:
       - sjs-net
     ports:
-      - "8080:80"
+      - "83:80"
     env_file:
       - common.env
     volumes:
