@@ -1,0 +1,35 @@
+upstream cr_server {
+	server  192.168.130.79:8020  weight=100 max_fails=1 fail_timeout=10s;
+}
+server {
+    listen       80;
+    server_name  localhost;
+
+    #charset koi8-r;
+    #access_log  /var/log/nginx/log/host.access.log  main;
+
+	root   /usr/share/nginx/html;
+  index  index.html index.htm;
+  location / {
+    try_files $uri $uri/ @rewrites;
+  }
+	location @rewrites {
+		  rewrite ^(.+)$ /index.html last;
+	}
+	location /tdt/wmts {
+		  proxy_set_header X-Real-IP $remote_addr;
+	      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	      proxy_set_header Host $http_host;
+	      proxy_set_header X-NginX-Proxy true;
+	      proxy_pass http://t0.tianditu.com/cva_w/wmts;
+	      proxy_redirect off;
+	}
+	location ~  /.*/api {
+	      proxy_set_header X-Real-IP $remote_addr;
+	      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	      proxy_set_header Host $http_host;
+	      proxy_set_header X-NginX-Proxy true;
+	      proxy_pass http://cr_server${request_uri};
+	      proxy_redirect off;
+	}
+}

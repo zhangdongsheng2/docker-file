@@ -1,0 +1,27 @@
+version: "3"
+
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+services:
+  server:
+    image: tutum/influxdb
+    container_name: influxsrv
+    restart: always
+    networks:
+      - sjs-net
+    volumes:
+      - ./data/conf:/etc/influxdb
+      - /data/influxdb:/var/lib/influxdb
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+       - "8083:8083"
+       - "8086:8086"
+    expose:
+      - "3000"
+      - "8000"

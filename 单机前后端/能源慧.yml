@@ -1,0 +1,41 @@
+version: '3.3'
+# docker-compose restart base-api 重启服务端
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+services:
+  #服务端
+  new-biz-api:
+    build: java/.
+    container_name: new-biz-api
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./lrd-admin.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+  #前端
+  new-biz-web:
+    build: nginx/.
+    container_name: new-biz-web
+    networks:
+      - sjs-net
+    ports:
+      - "8080:80"
+    env_file:
+      - common.env
+    volumes:
+      - ./web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
+
+
+
+
+
+
