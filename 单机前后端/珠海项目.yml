@@ -82,6 +82,19 @@ services:
     volumes:
       - ./web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
 
+  #前端
+  zhuhai-rk:
+    build: nginx/.
+    container_name: zhuhai-rk
+    networks:
+      - sjs-net
+    ports:
+      - "30025:80"
+    env_file:
+      - common.env
+    volumes:
+      - ./zhuhai-rk:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
 
 #自定义网络
 networks:
