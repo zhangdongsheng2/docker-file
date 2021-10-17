@@ -1,0 +1,14 @@
+FROM openjdk:8u212-jre
+# 时区问题
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
+RUN mkdir /home/uploader
+
+RUN mv /etc/apt/sources.list /etc/apt/sources.list.bak
+COPY sources.list /etc/apt/sources.list
+RUN apt-get update -y && apt-get install --assume-yes apt-utils && apt-get install -y vim
+RUN apt-get install tesseract-ocr -y
+
+ENTRYPOINT ["java", "-server", "-Djava.security.egd=file:/dev/./urandom", "-Dfile.encoding=UTF-8", "-XX:+HeapDumpOnOutOfMemoryError", "-jar", "/app/app.jar" ]
+
+

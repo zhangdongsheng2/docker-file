@@ -1,0 +1,42 @@
+version: '3.3'
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+services:
+  #服务端
+  aisite-api:
+    build: java/.
+    container_name: aisite-api
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./wxwl-construction.jar:/app/app.jar  #打包的 jar 包按照名字放同级目录，然后重启服务
+
+  #前端
+  aisite-web:
+    build: nginx/.
+    container_name: aisite-web
+    networks:
+      - sjs-net
+    ports:
+      - "30080:80"
+    env_file:
+      - common.env
+    volumes:
+      - ./web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
+
+
+
+
+
+
+
+
