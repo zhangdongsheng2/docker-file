@@ -14,11 +14,11 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
-#      - DB_TYPE=postgres   #指定数据库
-#      - DB_HOST=db:5432
-#      - DB_NAME=gitea
-#      - DB_USER=gitea
-#      - DB_PASSWD=gitea
+      - DB_TYPE=postgres   #指定数据库
+      - DB_HOST=basic-timescaledb:5432
+      - DB_NAME=gitea
+      - DB_USER=gitea
+      - DB_PASSWD=gitea
     restart: always
     networks:
       - sjs-net
