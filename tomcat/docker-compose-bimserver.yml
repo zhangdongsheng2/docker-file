@@ -1,0 +1,19 @@
+version: '2.2'
+services:
+  bimserver-tomcat: # 服务名称
+    image: tomcat:9.0.54-jdk11-temurin # 创建容器时所需的镜像
+    container_name: bimserver-tomcat # 容器名称
+    restart: always # 容器总是重新启动
+    ports:
+      - 9290:8080
+    volumes:
+      - ./:/usr/local/tomcat/webapps/
+
+# war包名称更改为 ROOT.war,  更新时先做备份.
+#数据存储的主要目录在下面几个, 要做映射和备份.
+#incoming
+#database
+#plugins
+
+
+

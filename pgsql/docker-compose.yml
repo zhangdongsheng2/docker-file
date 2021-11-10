@@ -5,7 +5,9 @@ services:
     container_name: basic-timescaledb
     restart: unless-stopped
     ports:
-      - 5432:5432
+      - 30003:5432
+    networks:
+      - sjs-net
     environment:
       POSTGRES_PASSWORD: Sjs.379=
       LANG: "C.UTF-8"
@@ -20,6 +22,12 @@ services:
       - "postgres"
       - "-c"
       - "max_connections=10800"
+
+
+networks:
+  sjs-net:
+    external: true
+
 
 
 #      - "-c"
