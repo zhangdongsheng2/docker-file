@@ -1,0 +1,29 @@
+version: '3.7'
+# docker-compose restart base-api 重启服务端
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+
+x-logging:
+  &default-logging
+  driver: json-file  #默认json-file
+  options:
+    max-size: "200k"
+    max-file: "10"
+
+services:
+  #服务端
+  bitwarden-serve:
+    image: vaultwarden/server:latest
+    container_name: bitwarden-serve
+    networks:
+      - sjs-net
+    volumes:
+      - ./vw-data/:/data/  #数据目录
+    logging: *default-logging
+    ports:
+      - "33303:80"
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
