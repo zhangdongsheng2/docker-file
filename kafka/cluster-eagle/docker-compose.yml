@@ -12,6 +12,10 @@ services:
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+    volumes:  #创建zookeeper容器在宿主机的挂载目录
+      - ./zk01/data:/data #数据
+      - ./zk01/datalog:/datalog #日志
+      - ./zk01/conf:/conf #配置文件
 
   zoo2:
     image: zookeeper:3.4.13
@@ -25,6 +29,10 @@ services:
     environment:
       ZOO_MY_ID: 2
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+    volumes:  #创建zookeeper容器在宿主机的挂载目录
+      - ./zk02/data:/data #数据
+      - ./zk02/datalog:/datalog #日志
+      - ./zk02/conf:/conf #配置文件
 
   zoo3:
     image: zookeeper:3.4.13
@@ -38,6 +46,10 @@ services:
     environment:
       ZOO_MY_ID: 3
       ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+    volumes:  #创建zookeeper容器在宿主机的挂载目录
+      - ./zk03/data:/data #数据
+      - ./zk03/datalog:/datalog #日志
+      - ./zk03/conf:/conf #配置文件
 
   kafka1:
     image: wurstmeister/kafka
@@ -46,14 +58,19 @@ services:
     container_name: kafka1
     networks:
       - sjs-net
+    expose:
+      - "9999"
     ports:
-      - "9002:9092"
+      - "9002:9002"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka1
-      KAFKA_LISTENERS: PLAINTEXT://kafka1:9092
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
-      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_LISTENERS: PLAINTEXT://kafka1:9002
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9002
+      KAFKA_ADVERTISED_PORT: 9002
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      JMX_PORT: 9999
+    volumes:  # 将 kafka 的数据文件映射出来
+      - ./kafka1:/kafka
     depends_on:
       - zoo1
       - zoo2
@@ -66,14 +83,19 @@ services:
     container_name: kafka2
     networks:
       - sjs-net
+    expose:
+      - "9999"
     ports:
-      - "9003:9093"
+      - "9003:9003"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka2
-      KAFKA_LISTENERS: PLAINTEXT://kafka2:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
-      KAFKA_ADVERTISED_PORT: 9093
+      KAFKA_LISTENERS: PLAINTEXT://kafka2:9003
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9003
+      KAFKA_ADVERTISED_PORT: 9003
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      JMX_PORT: 9999
+    volumes:  # 将 kafka 的数据文件映射出来
+      - ./kafka2:/kafka
     depends_on:
       - zoo1
       - zoo2
@@ -86,14 +108,19 @@ services:
     container_name: kafka3
     networks:
       - sjs-net
+    expose:
+      - "9999"
     ports:
-      - "9004:9094"
+      - "9004:9004"
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka3
-      KAFKA_LISTENERS: PLAINTEXT://kafka3:9094
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
-      KAFKA_ADVERTISED_PORT: 9094
+      KAFKA_LISTENERS: PLAINTEXT://kafka3:9004
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9004
+      KAFKA_ADVERTISED_PORT: 9004
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2181,zoo3:2181
+      JMX_PORT: 9999
+    volumes:  # 将 kafka 的数据文件映射出来
+      - ./kafka3:/kafka
     depends_on:
       - zoo1
       - zoo2
