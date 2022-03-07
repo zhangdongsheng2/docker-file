@@ -1,0 +1,13 @@
+version: "3"
+
+# docker run --restart=always --network host -d -v /etc/frp/frps.ini:/etc/frp/frps.ini --name frps snowdreamtech/frps
+
+services:
+  server:
+    image: snowdreamtech/frps
+    container_name: frps
+    network_mode: host
+    restart: always
+    volumes:
+      - ./frps.ini:/etc/frp/frps.ini
+
