@@ -2,7 +2,7 @@ version: '3.5'
 services:
 
   nginx:
-    image: jenkinsci/blueocean
+    image: jenkinsci/blueocean:1.25.2
     container_name: basic-jenkinsci
     restart: always
     user: root
