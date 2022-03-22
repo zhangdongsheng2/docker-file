@@ -1,7 +1,7 @@
 #!/bin/bash
 
 backup_time=`date +%Y%m%d%H%M`
-content_msg="222.databases->oss://wuxiyuan/image/merger/===== Time:$backup_time"
+content_msg="222.week->oss://wuxiyuan/image/merger/===== Time:$backup_time"
 
 #发送钉钉信息
 function sendMsg(){
