@@ -6,6 +6,7 @@ services:
   base-api:
     build: java/.
     container_name: base-api
+    restart: always # 容器总是重新启动
     ports:
       - "8081:8081"
     networks:
@@ -19,6 +20,7 @@ services:
   base-web:
     build: nginx/.
     container_name: base-web
+    restart: always # 容器总是重新启动
     networks:
       - sjs-net
     ports:
