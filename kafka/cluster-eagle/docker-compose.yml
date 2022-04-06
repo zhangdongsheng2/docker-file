@@ -140,6 +140,8 @@ services:
     volumes:
       - ./efak-web-2.1.0:/opt/kafka-eagle  #打包的 jar 包按照名字放同级目录，然后重启服务
 
+#export KE_JAVA_OPTS="-server -Xmx1g -Xms1g -XX:MaxGCPauseMillis=20 -XX:+UseG1GC -XX:MetaspaceSize=128m -XX:InitiatingHeapOccupancyPercent=35 -XX:G1HeapRegionSize=16M -XX:MinMetaspaceFreeRatio=50 -XX:MaxMetaspaceFreeRatio=80"
+
 
 
 
