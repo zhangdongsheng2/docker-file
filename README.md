@@ -1,30 +1,92 @@
 # docker-file
 
-#### 介绍
+# 介绍
 docker安装的一些软件
+* 程序启动的 docker-compose 相关文件. 
+* 微服务相关 docker-swarm 相关示例.
 
-#### 软件架构
-软件架构说明
+# 目录列表
+```text
+treeDir:
+|
+├─activemq
+├─airflow
+├─bitwarden
+├─docker-swarm
+│  ├─nacos
+│  └─sentinel
+├─dolphinscheduler
+├─emqx
+├─es
+├─flink
+├─frp
+├─FTP
+├─gitea
+├─gitlab
+├─grafana
+├─haproxy
+├─influxdb
+├─jenkins
+├─kafka
+│  └─cluster-eagle
+├─mongodb
+├─mysql
+│  ├─master
+│  ├─mysql-8.0
+│  └─slave
+├─nacos
+│  └─单机
+├─nexus
+├─nginx
+├─partainer
+├─pgsql
+│  ├─master
+│  ├─pgpool
+│  ├─pgpool-bitnami
+│  └─slave
+├─prometheus
+├─python
+├─rabbitmq
+├─redis
+│  ├─cloud
+│  │  ├─conf-6373
+│  │  └─conf-6377
+│  └─single
+│      └─conf
+├─rendertron
+├─rocketmq
+│  └─data
+│      └─brokerconf
+├─seata
+│  └─conf
+├─tomcat
+├─visualizer
+├─xxl-job
+├─zabbix
+├─zookeeper
+├─单机前后端
+│  ├─java
+│  └─nginx
+├─可道云
+│  ├─dockerfile
+│  ├─mysql
+│  │  └─conf
+│  └─nextcloud私盘
+└─扬子江docker-swarm
+    ├─bak
+    └─env
+```
 
 
 #### 安装教程
 
 1.  xxxx
-2.  xxxx
-3.  xxxx
+
 
 #### 使用说明
 
 1.  xxxx
-2.  xxxx
-3.  xxxx
 
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
 
 
 #### 码云特技
