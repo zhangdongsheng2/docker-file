@@ -34,8 +34,8 @@ services:
       - "9002:80"
     env_file:
       - common.env
-  depends_on:
-    - new-biz-api   #等待指定容器启动后在启动自己
+    depends_on:
+      - new-biz-api   #等待指定容器启动后在启动自己
     volumes:
       - ./web:/usr/share/nginx/html  #打包好的文件放 web 文件夹中，然后刷新浏览器
 

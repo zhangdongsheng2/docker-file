@@ -1,9 +1,27 @@
 version: '3.5'
 services:
-  timescaledb:
-    image: emqx/emqx:latest
+  emqx-service:
+    image: emqx/emqx:v4.0.0
     container_name: basic-emqx
     restart: unless-stopped             # 设置重启策略不断的重启
+    networks:
+      - sjs-net
     ports:
-      - 1883:1883
-      - 18083:18083
+      - "1883:1883"
+      - "18083:18083"
+      - "9083:8083"
+      - "9084:8084"
+      - "9081:8081"
+
+#1883        MQTT TCP 协议端口
+#9083        WebSocket 端口
+#9084        WebSocket with SSL 端口
+#18083       管理控制台端口
+#9081        http:management
+#8883        mqtt:ssl
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+

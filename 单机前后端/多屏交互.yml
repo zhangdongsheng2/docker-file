@@ -1,0 +1,120 @@
+version: '3.7'
+# docker-compose restart base-api 重启服务端
+# docker network create --driver=bridge --subnet=172.3.0.0/16 sjs-net
+
+x-hosts:
+  &default-hosts
+    - "dpjh-api-server:10.37.127.22"
+    - "dpjh-register:10.37.127.22"
+    - "dpjh-gateway:10.37.127.22"
+    - "dpjh-redis:10.37.127.22"
+    - "dpjh-mysql:10.37.127.22"
+    - "dpjh-auth:10.37.127.22"
+    - "dpjh-sentinel:10.37.127.22"
+
+services:
+  dpjh-auth:
+    image: tsl_jdk8_256:2.0
+    container_name: dpjh-auth
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-auth.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-file-web:
+    image: tsl_jdk8_256:2.0
+    container_name: dpjh-file-web
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-file-web.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-sentinel-dashboard:
+    image: tsl_jdk8_256:2.0
+    container_name: dpjh-sentinel-dashboard
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-sentinel-dashboard.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-upms-biz:
+    image: tsl_jdk8_512:2.0
+    container_name: dpjh-upms-biz
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-upms-biz.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-admin-web:
+    image: tsl_jdk8_512:2.0
+    container_name: dpjh-admin-web
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-admin-web.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-gateway:
+    image: tsl_jdk8_256:2.0
+    container_name: dpjh-gateway
+    extra_hosts: *default-hosts
+    ports:
+      - "9999:9999"
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-gateway.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-pad-web:
+    image: tsl_jdk8_512:2.0
+    container_name: dpjh-pad-web
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-pad-web.jar:/app/app.jar
+      - ./logs:/logs
+
+  dpjh-tosscreen-web:
+    image: tsl_jdk8_512:2.0
+    container_name: dpjh-tosscreen-web
+    extra_hosts: *default-hosts
+    networks:
+      - sjs-net
+    env_file:
+      - common.env
+    volumes:
+      - ./data/dpjh-tosscreen-web.jar:/app/app.jar
+      - ./logs:/logs
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+
