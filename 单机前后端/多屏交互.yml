@@ -4,18 +4,19 @@ version: '3.7'
 
 x-hosts:
   &default-hosts
-    - "dpjh-api-server:10.37.127.22"
-    - "dpjh-register:10.37.127.22"
-    - "dpjh-gateway:10.37.127.22"
-    - "dpjh-redis:10.37.127.22"
-    - "dpjh-mysql:10.37.127.22"
-    - "dpjh-auth:10.37.127.22"
-    - "dpjh-sentinel:10.37.127.22"
+  - "dpjh-api-server:10.37.152.2"
+  - "dpjh-register:10.37.163.240"
+  - "dpjh-gateway:10.37.163.240"
+  - "dpjh-redis:10.37.152.3"
+  - "dpjh-mysql:10.37.152.3"
+  - "dpjh-auth:10.37.163.240"
+  - "dpjh-sentinel:10.37.163.240"
 
 services:
   dpjh-auth:
     image: tsl_jdk8_256:2.0
     container_name: dpjh-auth
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
@@ -28,6 +29,7 @@ services:
   dpjh-file-web:
     image: tsl_jdk8_256:2.0
     container_name: dpjh-file-web
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
@@ -40,6 +42,7 @@ services:
   dpjh-sentinel-dashboard:
     image: tsl_jdk8_256:2.0
     container_name: dpjh-sentinel-dashboard
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
@@ -52,6 +55,7 @@ services:
   dpjh-upms-biz:
     image: tsl_jdk8_512:2.0
     container_name: dpjh-upms-biz
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
@@ -64,6 +68,7 @@ services:
   dpjh-admin-web:
     image: tsl_jdk8_512:2.0
     container_name: dpjh-admin-web
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
@@ -76,6 +81,7 @@ services:
   dpjh-gateway:
     image: tsl_jdk8_256:2.0
     container_name: dpjh-gateway
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     ports:
       - "9999:9999"
@@ -90,6 +96,7 @@ services:
   dpjh-pad-web:
     image: tsl_jdk8_512:2.0
     container_name: dpjh-pad-web
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
@@ -102,6 +109,7 @@ services:
   dpjh-tosscreen-web:
     image: tsl_jdk8_512:2.0
     container_name: dpjh-tosscreen-web
+    restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
     networks:
       - sjs-net
