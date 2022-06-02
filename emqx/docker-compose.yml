@@ -13,7 +13,7 @@ services:
       - "EMQX_LOADED_PLUGINS=emqx_auth_username"
       - "EMQX_AUTH__USER__1__USERNAME=mqprd"
       - "EMQX_AUTH__USER__1__PASSWORD=fbjLcBESCppsd2dn"
-      - "EMQX_dashboard__default_user__password=x8n7w3v8p2"
+      - "EMQX_DASHBOARD__DEFAULT_USER__PASSWORD=x8n7w3v8p2"
     networks:
       - sjs-net
 #    volumes:
@@ -32,17 +32,12 @@ services:
 #9081        http:management
 #8883        mqtt:ssl
 
-
-
 #volumes:
 #  vol-emqx:
 #    name: tsl-emqx
-
-
 
 #自定义网络
 networks:
   sjs-net:
     external: true
 
-#  emqx_recon,emqx_retainer,emqx_management,emqx_dashboard,emqx_telemetry,emqx_rule_engine,
