@@ -1,11 +1,23 @@
 version: '3.5'
 services:
   emqx-service:
-    image: emqx/emqx:v4.0.0
+    image: emqx/emqx:4.2.14
     container_name: basic-emqx
+    user: root
     restart: unless-stopped             # 设置重启策略不断的重启
+    environment:
+      - "EMQX_NAME=emqx"
+      - "EMQX_HOST=127.0.0.1"
+      - "EMQX_ACL_NOMATCH=deny"
+      - "EMQX_ALLOW_ANONYMOUS=false"
+      - "EMQX_LOADED_PLUGINS=emqx_auth_username"
+      - "EMQX_AUTH__USER__1__USERNAME=mqprd"
+      - "EMQX_AUTH__USER__1__PASSWORD=fbjLcBESCppsd2dn"
+      - "EMQX_dashboard__default_user__password=x8n7w3v8p2"
     networks:
       - sjs-net
+#    volumes:
+#      - vol-emqx:/opt/emqx/data/mnesia
     ports:
       - "1883:1883"
       - "18083:18083"
@@ -20,8 +32,17 @@ services:
 #9081        http:management
 #8883        mqtt:ssl
 
+
+
+#volumes:
+#  vol-emqx:
+#    name: tsl-emqx
+
+
+
 #自定义网络
 networks:
   sjs-net:
     external: true
 
+#  emqx_recon,emqx_retainer,emqx_management,emqx_dashboard,emqx_telemetry,emqx_rule_engine,
