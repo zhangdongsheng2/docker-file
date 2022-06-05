@@ -1,0 +1,33 @@
+version: '3.7'
+
+# 下载镜像: curl -o logspout.tar https://zhuhaibus.oss-cn-shenzhen.aliyuncs.com/image/logspout.tar
+# 下载镜像: wget -O logspout.tar https://zhuhaibus.oss-cn-shenzhen.aliyuncs.com/image/logspout.tar
+# 导入镜像: docker load < logspout.tar
+
+x-hosts:
+  &default-hosts
+  - "logstash:10.37.163.240"
+
+services:
+  logspout:
+    image: logspout_logspout:latest
+    container_name: logspout
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime
+    environment:
+      ROUTE_URIS: logstash://logstash:5000
+      LOGSTASH_TAGS: "tsl_cqpark_log"
+      LOGSPOUT: "ignore"
+      BACKLOG: "false"
+    networks:
+      - sjs-net
+    restart: on-failure
+    extra_hosts: *default-hosts
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+

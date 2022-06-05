@@ -1,0 +1,23 @@
+input {
+    syslog {
+        port => 5000
+        type => "docker"
+    }
+}
+
+## Add your filters / logstash plugins configuration here
+
+output {
+        elasticsearch {
+                hosts => "elasticsearch:9200"
+                user => "elastic"
+                password => "changeme"
+                ecs_compatibility => disabled
+                index => "alpine-%{+YYYY_MM}"
+        }
+
+        stdout {
+            id => "my_plugin_id"
+        }
+
+}

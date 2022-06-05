@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+#  参考 elk_user 启动如下两个服务
+#  elasticsearch
+#  kibana
+  fluentd:
+    build: ./fluentd
+    container_name: fluentd
+    networks:
+      - sjs-net
+    volumes:
+      - ./conf:/fluentd/etc
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+
+#  示例使用方式
+#  demo-web:
+#    image: httpd
+#    container_name: demo-web
+#    ports:
+#      - "83:80"
+#    logging:
+#      driver: "fluentd"
+#      options:
+#        fluentd-address: fluentd:24224
+#        tag: httpd.access
+#    depends_on:
+#      - fluentd
+
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+

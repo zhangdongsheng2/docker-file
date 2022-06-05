@@ -1,0 +1,30 @@
+version: '3.7'
+
+x-hosts:
+  &default-hosts
+  - "logstash:10.37.163.240"
+
+services:
+  logspout:
+    build:
+      context: ..
+    container_name: logspout
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime
+    environment:
+      ROUTE_URIS: logstash://logstash:5000
+      LOGSTASH_TAGS: "tsl_cqpark_log"
+      LOGSPOUT: "ignore"
+      BACKLOG: "false"
+    networks:
+      - sjs-net
+    restart: on-failure
+    extra_hosts: *default-hosts
+
+#自定义网络
+networks:
+  sjs-net:
+    external: true
+
+

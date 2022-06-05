@@ -1,0 +1,22 @@
+input {
+  udp {
+    port  => 5000
+    codec => json
+  }
+  tcp {
+    port => 5000
+    codec => json
+  }
+}
+
+
+output {
+        elasticsearch {
+                hosts => "elasticsearch:9200"
+                user => "elastic"
+                password => "changeme"
+                ecs_compatibility => disabled
+                index => "tsl_log-%{+YYYY_MM}"
+        }
+
+}
