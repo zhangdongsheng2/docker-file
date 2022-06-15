@@ -11,6 +11,8 @@ x-hosts:
   - "dpjh-mysql:10.37.152.3"
   - "dpjh-auth:10.37.163.240"
   - "dpjh-sentinel:10.37.163.240"
+  - "dpjh-padweb:110.37.152.4"
+  - "dpjh-minio:10.37.152.3"
 
 services:
   dpjh-auth:
