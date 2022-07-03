@@ -85,6 +85,13 @@ services:
     container_name: dpjh-gateway
     restart: always # 容器总是重新启动
     extra_hosts: *default-hosts
+    entrypoint: ''
+    command: >
+      /bin/bash -c '
+      sleep 20;
+      echo "=========sleep over============";
+      java -server -Xms512M -Xmx512M -Djava.security.egd=file:/dev/./urandom -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -jar /app/app.jar;
+      '
     ports:
       - "9999:9999"
     networks:
